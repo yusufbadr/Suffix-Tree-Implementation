@@ -1,7 +1,3 @@
-//
-// Created by Yusuf Badr on 02/12/2023.
-//
-
 
 class SuffixTree{
 public:
