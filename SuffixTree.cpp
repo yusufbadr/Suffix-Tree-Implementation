@@ -2,6 +2,7 @@
 
 #include <cstring>
 
+
 class SuffixNode;
 
 struct Node{
