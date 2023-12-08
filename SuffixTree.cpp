@@ -1,119 +1,66 @@
-// <cstdlib>, <cstdio>, <cstring>, <iostream>
-
 #include <cstring>
 
-
-class SuffixNode;
-
-struct Node{
-    SuffixNode *data;
-    Node *next;
-};
-
-class LinkedList{
+class SuffixTreeNode{
 public:
-
-
-    Node *head;
-
-    void insert(SuffixNode suffixNode);
-    Node* getMatchingNode(const char* text);
-
-};
-
-class SuffixNode{
-public:
-    SuffixNode(int startIndx, int suffixIndx){
-        edgeStartIndex = startIndx;
-        suffixIndex = suffixIndx;
-    }
-
-    int edgeStartIndex;
+    int substringStartIndex;
     int suffixIndex;
 
-    // Linked List
-    LinkedList *childrenHead;
+    SuffixTreeNode *next;
+    SuffixTreeNode *children;
 
-private:
+    SuffixTreeNode(int substrIndx, int suffixIndx){
+        substringStartIndex = substrIndx;
+        suffixIndex = suffixIndx;
+    }
 };
+
 
 class SuffixTree{
 public:
-    SuffixTree(char* text);
-    void Search(const char* text);
-    ~SuffixTree();
-
-    SuffixNode *root;
-private:
+    SuffixTreeNode *root;
+    char *string;
+    int len;
 
 
-};
-
-SuffixTree::SuffixTree(char *text) {
-    root = new SuffixNode(-1, -1);
-
-    strcat(text, "$");
-    int len = (int) strlen(text);
-    for (int i = 0; i <len ; ++i) {
-        char *suffix = new char[len-i];
-        for (int j = i; j < len; ++j) {
-            suffix[j-i] = text[j];
-        }
-
-        // now i have a suffix
-        SuffixNode *currentSuffixNode = root;
-        while (currentSuffixNode != nullptr){
-            LinkedList *currentLinkedListNode = currentSuffixNode->childrenHead;
-
-            while(currentLinkedListNode != nullptr){
-                // if matching prefix
-
-
-                // len is absolute difference(edgeStart of children)
-
-                Node *childHead = currentLinkedListNode->head;
-                int minChildEdgeStart;
-                if (childHead!= nullptr){
-                    minChildEdgeStart = childHead->data->edgeStartIndex;
-                    childHead = childHead->next;
+    int getLenOfSubstr(SuffixTreeNode *node){
+        // len is min(children substr start index) - node substr start index
+        // if no children len of string - node substr start index
+        // a node is leaf is node->children is null
+        if (node->children == nullptr){
+            return len - node->substringStartIndex;
+        } else {
+            // else node is internal node, then get min of children node
+            SuffixTreeNode *current = node->children;
+            int minSubstrStartIndex = current->substringStartIndex;
+            while (current!= nullptr){
+                if (current->substringStartIndex<minSubstrStartIndex){
+                    minSubstrStartIndex = current->substringStartIndex;
                 }
-
-                while (childHead!= nullptr){
-                    if(childHead->data->edgeStartIndex < minChildEdgeStart){
-                        minChildEdgeStart=childHead->data->edgeStartIndex;
-                    }
-                    childHead = childHead->next;
-                }
-
-                int lenSubstr = minChildEdgeStart - currentLinkedListNode->head->data->edgeStartIndex;
-
-
-                for (int j = currentLinkedListNode->head->data->edgeStartIndex; j < lenSubstr; ++j) {
-                    if (text[]);
-                }
-
-
+                current = current->next;
             }
-
-
-
+            return minSubstrStartIndex;
         }
-
-
-
-
-
-
-
-        delete[] suffix;
     }
 
 
-
-}
-
-void SuffixTree::Search(const char *text) {
-
-}
+    void insertSuffix(const char *suffix, int suffixIndex){
+        // suffix is the same as the edge starting index at this point
 
 
+
+
+    }
+
+    SuffixTree(char *inString){
+        string = inString;
+        // dummy root node
+        root = new SuffixTreeNode(-1, -1);
+        strcat(string, "$");
+        len = (int) strlen(string);
+        for (int i = 0; i < len; i++){
+            insertSuffix(string + i, i);
+        }
+    }
+
+
+};
