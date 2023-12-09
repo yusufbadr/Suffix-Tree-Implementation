@@ -177,8 +177,6 @@ public:
             insertSuffix(originalString + i, i);
         }
     }
-
-
 };
 
 
