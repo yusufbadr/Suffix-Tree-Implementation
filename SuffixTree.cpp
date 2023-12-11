@@ -15,6 +15,7 @@ public:
     }
 };
 
+
 class LinkedList{
 public:
     Node *head;
@@ -25,10 +26,22 @@ public:
     }
 
     void insert(Node *node){
-        node->next=head;
-        head = node;
+        if (head== nullptr){
+            head=node;
+            return;
+        }
+
+        Node *curr = head;
+        while (curr->next!= nullptr){
+            curr = curr->next;
+        }
+        curr->next = node;
     }
 };
+
+
+
+
 
 class SuffixTreeNode{
 public:
@@ -51,6 +64,9 @@ public:
     // banana
     int len;
 
+    char *stringQuery;
+//    LinkedList<int> results;
+
 
     int getLenOfSubstr(SuffixTreeNode node){
         // len is min(children substr start index) - node substr start index
@@ -63,14 +79,14 @@ public:
             Node *nodeCurrent = node.children.head;
             SuffixTreeNode *current = nodeCurrent->data;
             int minSubstrStartIndex = current->substringStartIndex;
-            while (nodeCurrent->next != nullptr){
+            while (nodeCurrent != nullptr){
+                current = nodeCurrent->data;
                 if (current->substringStartIndex<minSubstrStartIndex){
                     minSubstrStartIndex = current->substringStartIndex;
                 }
                 nodeCurrent=nodeCurrent->next;
-                current = nodeCurrent->data;
             }
-            return minSubstrStartIndex;
+            return minSubstrStartIndex-node.substringStartIndex;
         }
     }
 
@@ -171,20 +187,71 @@ public:
         // dummy root node
         SuffixTreeNode *suffixRoot = new SuffixTreeNode(-1, -1);
         root = new Node(suffixRoot);
-        strcat(originalString, "$");
         len = (int) strlen(originalString);
         for (int i = 0; i < len; i++){
             insertSuffix(originalString + i, i);
         }
     }
+    /*
+     *  if remainingChars == 0: print all nodes where suffix!=-1;
+        if curretNode==NULL and rem>0: not found
+        if currNode!=null and prefix==n: recursive: children, remChar-prefix;
+        if currNode!=null && prefix==0: recursive(currNode.next, remChar)
+     * */
+
+    void searchUtil(int i, Node *currentNode){
+        if (i==strlen(stringQuery)){
+            Node *tempNode = currentNode;
+            while(tempNode!=nullptr){
+                if (tempNode->data->suffixIndex!=-1){
+//                    results.insert(&(tempNode->data->suffixIndex));
+                    std::cout << tempNode->data->suffixIndex << " ";
+
+                } else {
+                    searchUtil(i, tempNode->data->children.head);
+                }
+                tempNode=tempNode->next;
+            }
+        } else if (currentNode== nullptr){
+            std::cout << "NOT FOUND / -1 ";
+        } else /*if (currentNode!= nullptr)*/{
+            int matchingPrefix = getMatchingPrefix(stringQuery+i, *(currentNode->data));
+            if (matchingPrefix <= getLenOfSubstr(*(currentNode->data)) && matchingPrefix>0){
+                if (currentNode->data->children.head== nullptr){
+                    std::cout << currentNode->data->suffixIndex << " ";
+                } else {
+                    searchUtil(i+matchingPrefix, currentNode->data->children.head);
+                }
+            } else if (matchingPrefix==0){
+                searchUtil(i, currentNode->next);
+            }
+        }
+
+
+    }
+
+    void Search(char *string){
+        stringQuery = string;
+        searchUtil(0, root->data->children.head);
+    }
+
+
+
 };
 
 
-int main(){
-//    char string[] = "banana";
-    char string[] = "acacba";
-    SuffixTree suffixTree(string);
+int main()
+{
+    SuffixTree t1("abracadabraabrakadabraabracadabraabrakadabraabrakadabraabrakadabraabrakadabraabrakadabraabrakadabraabrakadabraabrakadabraabrakadabraabrakadabraabrakadabraabrakadabraabrakadabraabrakadabraabrakadabra$");
 
+    // Test Case 4
+    t1.Search("brak"); // Prints: 8 33 58 83
+    std::cout << std::endl;
+
+    // Test Case 7
+    t1.Search("abrakadabra"); // Prints: 11 36 61
+    std::cout << std::endl;
 
     return 0;
 }
+
