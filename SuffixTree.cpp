@@ -80,7 +80,7 @@ public:
         // i is a counter for the suffixTreeNode substring while j is a counter for
         // current suffix
         int i = suffixTreeNode.substringStartIndex, j = 0;
-        while (i<suffixTreeNode.substringStartIndex+lenOfSuffixNode, j<strlen(suffix)){
+        while (i<suffixTreeNode.substringStartIndex+lenOfSuffixNode && j<strlen(suffix)){
             if (originalString[i]==suffix[j]){
                 i++;
                 j++;
