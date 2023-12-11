@@ -171,7 +171,6 @@ public:
         // dummy root node
         SuffixTreeNode *suffixRoot = new SuffixTreeNode(-1, -1);
         root = new Node(suffixRoot);
-        strcat(originalString, "$");
         len = (int) strlen(originalString);
         for (int i = 0; i < len; i++){
             insertSuffix(originalString + i, i);
