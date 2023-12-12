@@ -161,6 +161,7 @@ public:
 
         } else if (prefix==0 && currentNode->next == nullptr){
             // add to current linked list
+            // TODO: both suffix indices should be different, suffixIndex+prevMatching
             Node *newNode = new Node(new SuffixTreeNode(suffixIndex, suffixIndex));
             currentNode->next = newNode;
 
@@ -216,13 +217,20 @@ public:
             std::cout << "NOT FOUND / -1 ";
         } else /*if (currentNode!= nullptr)*/{
             int matchingPrefix = getMatchingPrefix(stringQuery+i, *(currentNode->data));
-            if (matchingPrefix <= getLenOfSubstr(*(currentNode->data)) && matchingPrefix>0){
+            if (matchingPrefix == getLenOfSubstr(*(currentNode->data))){
                 if (currentNode->data->children.head== nullptr){
                     std::cout << currentNode->data->suffixIndex << " ";
                 } else {
                     searchUtil(i+matchingPrefix, currentNode->data->children.head);
                 }
-            } else if (matchingPrefix==0){
+            } else if (matchingPrefix < getLenOfSubstr((*(currentNode->data))) && matchingPrefix>0 && currentNode->data->children.head == nullptr){
+                if (matchingPrefix == strlen(stringQuery+i)){ // bana0
+                    std::cout << currentNode->data->suffixIndex << " ";
+                } else {
+                    std::cout << "NOT FOUND / -1 ";
+                }
+            }
+            else if (matchingPrefix < getLenOfSubstr((*(currentNode->data)))){
                 searchUtil(i, currentNode->next);
             }
         }
@@ -233,25 +241,113 @@ public:
     void Search(char *string){
         stringQuery = string;
         searchUtil(0, root->data->children.head);
+        std::cout << std::endl;
     }
 
+    void printUtil(Node *root){
+        Node *currNode = root;
 
+
+        while (currNode!= nullptr){
+            std::cout << "(" << currNode->data->substringStartIndex << ", " <<
+                      currNode->data->suffixIndex << ") - ";
+
+            int length = getLenOfSubstr(*(currNode->data));
+            char *edgeStr = new char[length + 1];
+            strncpy(edgeStr, originalString + currNode->data->substringStartIndex, length);
+            edgeStr[length] = '\0';
+            std::cout << edgeStr << std::endl;
+
+            if (currNode->data->children.head!= nullptr) {
+                printUtil(currNode->data->children.head);
+            }
+
+            currNode=currNode->next;
+        }
+    }
+
+    void print(){
+        std::cout << "(" << root->data->substringStartIndex << ", " <<
+                  root->data->suffixIndex << ")" << std::endl;
+        printUtil(root->data->children.head);
+
+    }
 
 };
 
-
 int main()
 {
-    SuffixTree t1("abracadabraabrakadabraabracadabraabrakadabraabrakadabraabrakadabraabrakadabraabrakadabraabrakadabraabrakadabraabrakadabraabrakadabraabrakadabraabrakadabraabrakadabraabrakadabraabrakadabraabrakadabra$");
+    SuffixTree t("bananabanaba$");
 
-    // Test Case 4
-    t1.Search("brak"); // Prints: 8 33 58 83
+    t.Search("ana"); // Prints: 1 3 7
+    t.Search("naba"); // Prints: 4 8
+    t.Search("banana0"); // NOT FOUND
+
     std::cout << std::endl;
 
-    // Test Case 7
-    t1.Search("abrakadabra"); // Prints: 11 36 61
+    SuffixTree t1("programming$");
+    t1.Search("gram");  // Prints: 3
+    t1.Search("pro");   // Prints: 0
+    t1.Search("ming");  // Prints: 7
+
     std::cout << std::endl;
+
+    // Case 2
+    SuffixTree t2("abracadabra$");
+    t2.Search("bra");   // Prints: 1 8
+    t2.Search("ada");   // Prints: 2 9
+    t2.Search("abr");   // Prints: 0
+
+    std::cout << std::endl;
+    // Case 3
+    SuffixTree t3("mississippi$");
+    t3.Search("ssi");   // Prints: 5
+    t3.Search("iss");   // Prints: 1 6
+    t3.Search("ssippi");// Prints: 7
+    std::cout << std::endl;
+    // Case 4
+    SuffixTree t4("algorithmabcbacacca$");
+    t4.Search("rithm"); // Prints: 4
+    t4.Search("algo");  // Prints: 0
+    t4.Search("ca");
+    std::cout << std::endl;
+    // Case 5
+    SuffixTree t5("datastructures$");
+    t5.Search("data"); // Prints: 4
+    t5.Search("a");  // Prints: 0
+    t5.Search("xyz");
+
+    std::cout << std::endl;
+    // Case 6
+    SuffixTree t6("abcdefgh$");
+    t6.Search("def");   // Prints: 3
+    t6.Search("gh");    // Prints: 6
+    t6.Search("abc");   // Prints: 0
+    std::cout << std::endl;
+    // Case 7
+    SuffixTree t7("xyxxy$");
+    t7.Search("yx");    // Prints: 2 5
+    t7.Search("xx");    // Prints: 1 4
+    t7.Search("x");
+    std::cout << std::endl;
+    // Case 8
+    SuffixTree t8("example$");
+    t8.Search("mpl");   // Prints: 4
+    t8.Search("exam");  // Prints: 0
+    t8.Search("ple");   // Prints: 6
+    std::cout << std::endl;
+    // Case 9
+    SuffixTree t9("testing$");
+    t9.Search("ing");   // Prints: 5
+    t9.Search("test");  // Prints: 0
+    t9.Search("ting");  // Prints: 6
+    std::cout << std::endl;
+    // Case 10
+    SuffixTree t10("abcdefgabcdefgabcdefg$");
+    t10.Search("cd");   // Prints: 2
+    t10.Search("ab");   // Prints: 0
+    t10.Search("fg");   // Prints: 5
+
 
     return 0;
 }
-
