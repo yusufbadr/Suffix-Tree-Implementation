@@ -351,3 +351,35 @@ int main()
 
     return 0;
 }
+
+
+
+
+//    void printUtil(Node *root){
+//        Node *currNode = root;
+//
+//
+//        while (currNode!= nullptr){
+//            std::cout << "(" << currNode->data->substringStartIndex << ", " <<
+//                      currNode->data->suffixIndex << ") - ";
+//
+//            int length = getLenOfSubstr(*(currNode->data));
+//            char *edgeStr = new char[length + 1];
+//            strncpy(edgeStr, originalString + currNode->data->substringStartIndex, length);
+//            edgeStr[length] = '\0';
+//            std::cout << edgeStr << std::endl;
+//
+//            if (currNode->data->children.head!= nullptr) {
+//                printUtil(currNode->data->children.head);
+//            }
+//
+//            currNode=currNode->next;
+//        }
+//    }
+//
+//    void print(){
+//        std::cout << "(" << root->data->substringStartIndex << ", " <<
+//                  root->data->suffixIndex << ")" << std::endl;
+//        printUtil(root->data->children.head);
+//
+//    }
