@@ -41,3 +41,11 @@ The project includes several test cases in the main function, demonstrating the 
 ## Installation
 
 Clone the repository to your local machine and compile the C++ code using a compatible compiler. No additional dependencies are required.
+
+## Contributors
+
+- [Yusuf Badr](https://github.com/yusufbadr)
+- [Your Name](https://github.com/your-username)
+- [Your Name](https://github.com/your-username)
+- [Your Name](https://github.com/your-username)
+- [Your Name](https://github.com/your-username)
