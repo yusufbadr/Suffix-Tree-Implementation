@@ -47,5 +47,5 @@ Clone the repository to your local machine and compile the C++ code using a comp
 - [Yusuf Badr](https://github.com/yusufbadr)
 - [Abdelrahman Wael](https://github.com/abwael)
 - [Adham Mansour](https://github.com/Mansour266)
-- [Your Name](https://github.com/your-username)
+- [Maya Ayman](https://github.com/MayaZayn)
 - [Your Name](https://github.com/your-username)
